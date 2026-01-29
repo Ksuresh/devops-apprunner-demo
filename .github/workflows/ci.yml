@@ -1,0 +1,31 @@
+name: CI Pipeline (Pull Request Checks)
+
+on:
+  pull_request:
+    branches:
+      - staging
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Basic Validation
+        run: |
+          echo "Running CI checks..."
+          
+          # Check index.html exists
+          if [ ! -f index.html ]; then
+            echo "❌ index.html not found!"
+            exit 1
+          fi
+
+          # Simple HTML sanity check
+          grep -q "<html" index.html
+          grep -q "</html>" index.html
+
+          echo "✅ CI Passed! Website is valid."
